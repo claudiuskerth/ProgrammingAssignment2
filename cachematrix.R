@@ -1,13 +1,15 @@
-## ---- cache inverse matrix ----
-
 # The following function 'makeCacheMatrix' can be used
 # to create an object that stores a matrix.
 # In addition, it creates an object method 'inv()' that can compute 
 # the inverse of the matrix, which must be invertible, and store it 
 # inside the object (cache). Subsequent calls to the inv() method will 
-# retrieve the inverse matrix from the cache inside the object 
-# unless a new matrix has been stored in the object since the last 
-# call to inv().
+# retrieve the inverse matrix from the cache unless a new matrix has 
+# been stored in the object since the last call to inv(). 
+
+# Note that the function 'cacheSolve' is inside 
+# the 'makeCacheMatrix' function.
+
+## ---- cache inverse matrix function ----
 
 makeCacheMatrix <-  function(){
         # initialize local variables
@@ -19,10 +21,8 @@ makeCacheMatrix <-  function(){
                 X <<- y
                 invX <<- NULL
         }
-        getX <- function() X
         setInvX <- function() invX <<- solve(X)
-        getInvX <- function() invX
-        clearCache <- function() invX <<- NULL
+        # return inverse of matrix X, from cache if possible
         cacheSolve <- function() {
                 if(!is.null(invX)){
                         message("retrieving inverse matrix from cache")
@@ -31,6 +31,11 @@ makeCacheMatrix <-  function(){
                 setInvX()
                 invX
         }
+        # auxiliary functions
+        getX <- function() X
+        getInvX <- function() invX
+        clearCache <- function() invX <<- NULL
+        # return list of object methods
         list(newX = newX, getX = getX, setInvX = setInvX,
              getInvX = getInvX, clearCache = clearCache,
              inv = cacheSolve)
